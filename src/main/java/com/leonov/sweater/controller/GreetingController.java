@@ -1,8 +1,10 @@
 package com.leonov.sweater.controller;
 
 import com.leonov.sweater.domain.Message;
+import com.leonov.sweater.domain.User;
 import com.leonov.sweater.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,12 @@ public class GreetingController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text, @RequestParam String tag,  Map<String, Object> model){
-        Message message = new Message(text,tag);
+    public String add(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag,
+            Map<String, Object> model){
+        Message message = new Message(user, text, tag);
 
         messageRepo.save(message);
 
